@@ -1,4 +1,4 @@
-package org.example;
+// package org.example;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -15,31 +15,37 @@ public class PeriodicTable implements PeriodicTableInterface {
 
     private final Scanner INPUT = new Scanner(System.in);
     private final String[][] MAIN_PERIODIC_TABLE = new String[7][18];
-    private final String[] LANTHANIDE_TABLE = new String[18];
-    private final String[] ACTINIDE_TABLE = new String[18];
+    private final String[][] GROUP_TABLE = new String[2][18];
 
-    private boolean displayLanthinides = false;
-    private boolean displayActinides = false;
+    // private final String[] LANTHANIDE_TABLE = new String[18];
+    // private final String[] ACTINIDE_TABLE = new String[18];
+
+
+    private boolean displayGroup = false;
+    // private boolean displayActinides = false;
+    private int starting_number = -1;
+    private int end_number = -1;
+
+    String element;
+    String periodic_number;
 
     public PeriodicTable(){
 
         String user_input = null;
-        int starting_number = -1;
-        int end_number = -1;
-
+        
         System.out.println("Display lanthinides? y/n?");
         user_input=INPUT.nextLine();
 
         if (user_input == "y"){
-            displayLanthinides = true;
+            displayGroup = true;           
         }
 
-        System.out.println("Display actinides? y/n?");
-        user_input=INPUT.nextLine();
+        // System.out.println("Display actinides? y/n?");
+        // user_input=INPUT.nextLine();
 
-        if (user_input == "y"){
-            displayActinides = true;
-        }
+        // if (user_input == "y"){
+        //     displayActinides = true;
+        // }
 
        starting_number = promptForInt("Enter starting element number:");
        end_number = promptForInt("Enter ending element number:");
@@ -83,11 +89,38 @@ public class PeriodicTable implements PeriodicTableInterface {
 
     @Override
     public void printTables() {
+        
+        if(displayGroup == true)
+        {
+            for(int i = starting_number; i <= end_number; i++)
+            {
+                //[7][18]
 
+                
+                main_table_element = "" + MAIN_PERIODIC_TABLE[i][];
+                System.out.print(main_table_element);
+                for(int j = 0; j <= 18; j++)
+                {
+                    MAIN_PERIODIC_TABLE[][]
+                    
+                }   
+            }
+        }
     }
 
     @Override
     public void printGroups() {
+        if(displayGroup == true)
+        {
+            for(int i = 0; i <= 2; i++)
+            {
+                GROUP_TABLE[i];
 
+                for(int j = 0; j <= 18; j++)
+                {
+                    
+                }   
+            }
+        }
     }
 }
