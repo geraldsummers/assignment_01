@@ -1,3 +1,5 @@
+package org.example;
+
 /**
  * KIT107 Assignment 1
  *
