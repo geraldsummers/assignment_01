@@ -1,5 +1,7 @@
 package org.example;
 
+import org.graalvm.collections.Pair;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -30,8 +32,8 @@ public class PeriodicTable implements PeriodicTableInterface {
 
     private final int TABLE_WIDTH = 18;
 
-    private final String[][] LANTHANIDE_TABLE = new String[18][2];
-    private final String[][] ACTINIDE_TABLE = new String[18][2];
+    private final String[][] LANTHANIDE_TABLE = new String[15][2];
+    private final String[][] ACTINIDE_TABLE = new String[15][2];
 
     private boolean displayGroup = false;
     private int starting_number = 1;
@@ -109,7 +111,8 @@ public class PeriodicTable implements PeriodicTableInterface {
                         selected_atomic_group,
                         selected_atomic_number,
                         LANTHANIDE_TABLE,
-                        LANTHANIDE_SEPERATOR_END);
+                        LANTHANIDE_SEPERATOR_END,
+                        LANTHANUM_ATOMIC_NUMBER);
             }
 
             //Actinide case
@@ -122,7 +125,8 @@ public class PeriodicTable implements PeriodicTableInterface {
                         selected_atomic_group,
                         selected_atomic_number,
                         ACTINIDE_TABLE,
-                        ACTINIDE_SEPERATOR_END);
+                        ACTINIDE_SEPERATOR_END,
+                        ACTINIUM_ATOMIC_NUMBER);
             }
         }
     }
@@ -139,7 +143,8 @@ public class PeriodicTable implements PeriodicTableInterface {
             int selected_atomic_group,
             int selected_atomic_number,
             String[][] selected_group_array,
-            int offset_value)
+            int offset_value,
+            int new_start)
     {
         selected_group_array[offset_value - selected_atomic_group] =
 
@@ -149,11 +154,7 @@ public class PeriodicTable implements PeriodicTableInterface {
 
                         String.valueOf(
                                 Integer.parseInt(
-                                        RAW_ATOMIC_TABLE[selected_atomic_number][1])
-                                        + offset_value)
-
-
-                };
+                                        String.valueOf(offset_value - selected_atomic_group)))};
     }
 
     /**
@@ -186,7 +187,6 @@ public class PeriodicTable implements PeriodicTableInterface {
      */
     private String padString(String input, int length){
         StringBuilder pad_buffer = new StringBuilder().append(input);
-        pad_buffer.append(input);
 
         if (input.length() < length){
             pad_buffer.append(" ".repeat(length - input.length()));
@@ -198,50 +198,57 @@ public class PeriodicTable implements PeriodicTableInterface {
 
     /**
      * Prints either groups table or the main periodic table
-     * @param table the table to print
+     * @param input_table the table to print
      */
-    private void printTable(String[][] table){
+    private void printTable(String[][] input_table, int starting_element_number){
         StringBuilder render_buffer = new StringBuilder();
-        int desired_position = starting_number;
-        int position = 0;
+        int current_print_column = 1;
+        for(int i = 0; i + starting_element_number <= end_number && i < input_table.length; i++){
+
+            if(input_table[i][1] != null){
+                int element_column = Integer.parseInt(input_table[i][1]);
+                String element_name = input_table[i][0];
 
 
-        while(position <= end_number){
 
-            int row = position % TABLE_WIDTH;
+                while (current_print_column < element_column) {
 
-            while(position % TABLE_WIDTH == row) {
-
-                if (desired_position == position) {
-                    render_buffer
-                            .append(padString(table[position][0], 2))
-                            .append(" ")
-                            .append(padString(table[position][1], 2))
-                            .append(" ");
-
-                }
-                else
-                {
-                    render_buffer.append("      ");
+                    render_buffer.append(" ".repeat(8));
+                    current_print_column++;
                 }
 
-                position++;
+                render_buffer
+                        .append(padString(element_name, 3))
+                        .append(" ")
+//                            .append(padString(table[element][1], 2))
+                        .append(padString(String.valueOf(i + starting_element_number), 3))
+                        .append(" ");
+                current_print_column++;
+
+                if (current_print_column > TABLE_WIDTH) {
+                    current_print_column = 1;
+                    render_buffer.append("\n");
+                }
             }
+
+
+
         }
-
-
-
         System.out.println(render_buffer);
     }
 
 
+
     @Override
     public void printTables() {
-        printTable(MAIN_PERIODIC_TABLE);
+        printTable(MAIN_PERIODIC_TABLE, 1);
 
     }
 
     @Override
     public void printGroups() {
+        System.out.println();
+        printTable(LANTHANIDE_TABLE, LANTHANUM_ATOMIC_NUMBER);
+        printTable(ACTINIDE_TABLE, ACTINIUM_ATOMIC_NUMBER);
     }
 }
