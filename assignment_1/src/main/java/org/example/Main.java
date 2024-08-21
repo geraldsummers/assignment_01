@@ -12,17 +12,6 @@ package org.example;
  */
 
 
-/**
- * Table handling:
- * each element specifies it's column
- * each row must have 18 entries
- * if none specified blank
- *
- * function 1 reads table into second table based upon column positions specified unless the column is negative which
- * specifies that it is a lanthanide or actinide in which case it is read into a lanthanide or actinide array
- * to be appended once the initial array has been finished
- *
- */
 
 public class Main
 {

@@ -1,46 +1,52 @@
-package org.example;
+/*
+* PeriodicTable.java
+* Laughlan Fahey and Nick Kesuma
+* 389403 and (?)
+*
+* A text based renderer of a periodic table.
+*
+* 21 August 2024
+*
+* Designed together, written by Laughlan (faster typer) and then discussed together
+*/
 
-import org.graalvm.collections.Pair;
+
+package org.example;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-/**
- * First you should obtain the following information from the user:
- * • whether the ‘Lanthanum’ group (elements 57–71) and ‘Actinium’ group (elements 89–103) should be printed — the default is ‘no’;
- * • the atomic number of the first element to display — the default is ‘1’ and should be used whenever a value less than 1 or greater than
- * 118 is given; and
- * • the atomic number of the last element to display — the default is ‘118’ and should be used whenever a number smaller than the first
- * number or larger than 118 is given.
- */
 public class PeriodicTable implements PeriodicTableInterface {
 
+    //User input scanner used for configuring the system
     private final Scanner INPUT = new Scanner(System.in);
 
-    private final int GROUP_COLUMN_OFFSET = 4;
-
+    //Negative values that separate lanthanides and actinides from regular elements in the hardcoded table
+    //Used to separate the lanthanides and actinides from the others
     private final int LANTHANIDE_SEPERATOR_START = -25;
     private final int LANTHANIDE_SEPERATOR_END = -11;
 
     private final int ACTINIDE_SEPERATOR_START = -45;
     private final int ACTINIDE_SEPERATOR_END = -31;
 
+    //How wide the table is, used for calculating rows
+    private final int TABLE_WIDTH = 18;
+
+    //Starting atomic numbers for the groups, used to correct the negative values they start with
     private final int LANTHANUM_ATOMIC_NUMBER = 57;
     private final int ACTINIUM_ATOMIC_NUMBER = 89;
 
+    //Store of periodic table data (but not the groups)
     private final String[][] MAIN_PERIODIC_TABLE = new String[118][2];
 
-    private final int TABLE_WIDTH = 18;
-
+    //Stores for group table data
     private final String[][] LANTHANIDE_TABLE = new String[15][2];
     private final String[][] ACTINIDE_TABLE = new String[15][2];
 
+    //Variables storing user read data
     private boolean displayGroup = false;
     private int starting_number = 1;
     private int end_number = 118;
-
-    String element;
-    String periodic_number;
 
     protected final String[][] RAW_ATOMIC_TABLE = {
 
@@ -74,7 +80,7 @@ public class PeriodicTable implements PeriodicTableInterface {
         System.out.println("Display lanthinides and actinides? y/n?");
         user_input=INPUT.nextLine();
 
-        if (user_input == "y"){
+        if (user_input.equals("y")){
             displayGroup = true;
         }
 
@@ -151,7 +157,6 @@ public class PeriodicTable implements PeriodicTableInterface {
                 new String[]{
                         RAW_ATOMIC_TABLE[selected_atomic_number][0],
 
-
                         String.valueOf(
                                 Integer.parseInt(
                                         String.valueOf(offset_value - selected_atomic_group)))};
@@ -210,7 +215,6 @@ public class PeriodicTable implements PeriodicTableInterface {
                 String element_name = input_table[i][0];
 
 
-
                 while (current_print_column < element_column) {
 
                     render_buffer.append(" ".repeat(8));
@@ -218,10 +222,9 @@ public class PeriodicTable implements PeriodicTableInterface {
                 }
 
                 render_buffer
-                        .append(padString(element_name, 3))
-                        .append(" ")
-//                            .append(padString(table[element][1], 2))
                         .append(padString(String.valueOf(i + starting_element_number), 3))
+                        .append(" ")
+                        .append(padString(element_name, 3))
                         .append(" ");
                 current_print_column++;
 
@@ -230,25 +233,22 @@ public class PeriodicTable implements PeriodicTableInterface {
                     render_buffer.append("\n");
                 }
             }
-
-
-
         }
         System.out.println(render_buffer);
     }
 
-
-
     @Override
     public void printTables() {
-        printTable(MAIN_PERIODIC_TABLE, 1);
+        printTable(MAIN_PERIODIC_TABLE, starting_number);
 
     }
 
     @Override
     public void printGroups() {
-        System.out.println();
-        printTable(LANTHANIDE_TABLE, LANTHANUM_ATOMIC_NUMBER);
-        printTable(ACTINIDE_TABLE, ACTINIUM_ATOMIC_NUMBER);
+        if(displayGroup){
+            System.out.println();
+            printTable(LANTHANIDE_TABLE, LANTHANUM_ATOMIC_NUMBER);
+            printTable(ACTINIDE_TABLE, ACTINIUM_ATOMIC_NUMBER);
+        }
     }
 }
